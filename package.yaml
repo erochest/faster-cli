@@ -1,0 +1,24 @@
+name: faster-cli
+version: '0.1.0.0'
+category: Web
+author: Eric Rochester
+maintainer: erochest@gmail.com
+copyright: Copyright 2017 Eric Rochester
+license: BSD3
+homepage: https://github.com/erochest/faster-cli#readme
+extra-source-files:
+- README.md
+dependencies:
+- base >=4.7 && <5
+- bytestring
+- cassava
+- cassava-conduit
+- conduit
+- conduit-combinators
+- conduit-extra
+- criterion
+- optparse-applicative
+executables:
+  faster-cli:
+    main: Main.hs
+    source-dirs: src
