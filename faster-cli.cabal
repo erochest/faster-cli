@@ -25,10 +25,18 @@ executable faster-cli
   build-depends:
       base >=4.7 && <5
     , bytestring
+    , bytestring-lexing
     , cassava
     , cassava-conduit
     , conduit
     , conduit-combinators
     , conduit-extra
     , criterion
+    , mtl
     , optparse-applicative
+    , resourcet
+    , safe-exceptions
+    , text
+    , text-format
+    , unordered-containers
+    , vector
