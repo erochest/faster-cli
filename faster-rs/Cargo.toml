@@ -3,4 +3,7 @@ name = "faster-rs"
 version = "0.1.0"
 authors = ["Eric Rochester <eric.rochester@willowtreeapps.com>"]
 
+[profile.release]
+debug = true
+
 [dependencies]

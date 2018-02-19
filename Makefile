@@ -48,4 +48,10 @@ haskell:
 		stack build && \
 		../repeat.rb stack exec -- faster-hs $(DATAFILE) 1 2
 
+rust:
+	cd faster-rs && \
+		cargo clean && \
+		cargo build --release && \
+		../repeat.rb ./target/release/faster-rs $(DATAFILE) 1 2
+
 .PHONY: python pypy d-ldc d-dmd nim golang haskell rust

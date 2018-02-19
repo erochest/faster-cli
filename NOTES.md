@@ -96,3 +96,16 @@ PEAK MEM: 49.6Mb
 
 # Rust
 
+First pass:
+
+```
+MIN TIME: 6.47s
+PEAK MEM: 11.3Mb
+```
+
+Second pass:
+
+```
+MIN TIME: 3.05s
+PEAK MEM: 1.2Mb
+```
