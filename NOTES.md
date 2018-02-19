@@ -109,3 +109,10 @@ Second pass:
 MIN TIME: 3.05s
 PEAK MEM: 1.2Mb
 ```
+
+Third:
+
+```
+MIN TIME: 2.59s
+PEAK MEM: 1.2Mb
+```
