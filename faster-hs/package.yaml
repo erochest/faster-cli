@@ -1,0 +1,22 @@
+name:                faster-hs
+version:             0.1.0.0
+#synopsis:
+#description:
+homepage:            https://github.com/erochest/faster-hs#readme
+license:             BSD3
+author:              Eric Rochester
+maintainer:          eric.rochester@willowtreeapps.com
+copyright:           Copyright 2017 WillowTree Apps, Inc.
+category:            Web
+extra-source-files:
+- README.md
+
+dependencies:
+  - base >= 4.7 && < 5
+  - bytestring
+  - unordered-containers
+
+executables:
+  faster-hs:
+    source-dirs:      src
+    main:             Main.hs

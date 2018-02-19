@@ -73,5 +73,21 @@ Final:
 
 # Haskell
 
+First pass:
+
+```
+real    0m4.509s
+user    0m4.112s
+sys     0m0.459s
+```
+
+Later:
+
+```
+real    0m3.959s
+user    0m3.703s
+sys     0m0.391s
+```
+
 # Rust
 

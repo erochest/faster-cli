@@ -24,4 +24,10 @@ golang:
 	cd go && go build csvtest.go
 	time ./go/csvtest ./ngrams.tsv 1 2
 
-.PHONY: python pypy d-ldc d-dmd nim golang
+haskell:
+	cd faster-hs && \
+		stack clean && \
+		stack build && \
+		time stack exec -- faster-hs ../ngrams.tsv 1 2
+
+.PHONY: python pypy d-ldc d-dmd nim golang haskell

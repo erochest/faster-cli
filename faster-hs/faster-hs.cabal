@@ -1,0 +1,32 @@
+-- This file has been generated from package.yaml by hpack version 0.20.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 28ad28ecd9ce026be8c206e401b0e69e035ca56474d89eee30ae408e7a71f048
+
+name:           faster-hs
+version:        0.1.0.0
+category:       Web
+homepage:       https://github.com/erochest/faster-hs#readme
+author:         Eric Rochester
+maintainer:     eric.rochester@willowtreeapps.com
+copyright:      Copyright 2017 WillowTree Apps, Inc.
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+cabal-version:  >= 1.10
+
+extra-source-files:
+    README.md
+
+executable faster-hs
+  main-is: Main.hs
+  hs-source-dirs:
+      src
+  build-depends:
+      base >=4.7 && <5
+    , bytestring
+    , unordered-containers
+  other-modules:
+      Paths_faster_hs
+  default-language: Haskell2010
