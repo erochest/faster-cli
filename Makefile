@@ -54,4 +54,7 @@ rust:
 		cargo build --release && \
 		../repeat.rb ./target/release/faster-rs $(DATAFILE) 1 2
 
-.PHONY: python pypy d-ldc d-dmd nim golang haskell rust
+rust-profile: rust
+	~/s/FlameGraph/stackcollapse.pl ./faster-rs/faster-rs.stacks | ~/s/FlameGraph/flamegraph.pl > ./faster-rs/faster-rs.svg
+
+.PHONY: python pypy d-ldc d-dmd nim golang haskell rust rust-profile

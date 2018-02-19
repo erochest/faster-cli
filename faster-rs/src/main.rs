@@ -26,12 +26,14 @@ fn main() {
         .filter_map(|line| {
             let line = line.unwrap();
             let mut words = line.split_whitespace();
-            words.nth(key_index).and_then(|k| {
-                words
-                    .nth(value_index - key_index)
-                    .and_then(|v| v.parse::<usize>().ok())
-                    .map(|v| (String::from(k), v))
-            })
+            words.nth(key_index)
+                .and_then(|k| k.parse::<usize>().ok())
+                .and_then(|k| {
+                    words
+                        .nth(value_index - key_index)
+                        .and_then(|v| v.parse::<usize>().ok())
+                        .map(|v| (k, v))
+                })
         })
         .fold(HashMap::new(), |mut index, (k, v)| {
             index.entry(k).and_modify(|e| *e += v).or_insert(v);
