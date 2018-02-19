@@ -4,7 +4,8 @@
 From https://dlang.org/blog/2017/05/24/faster-command-line-tools-in-d/
 
 ```
-       18.60 real        18.18 user         0.21 sys
+MIN TIME: 19.87s
+PEAK MEM: 5.8Mb
 ```
 
 # Pypy
@@ -12,7 +13,8 @@ From https://dlang.org/blog/2017/05/24/faster-command-line-tools-in-d/
 From https://dlang.org/blog/2017/05/24/faster-command-line-tools-in-d/
 
 ```
-        3.70 real         3.34 user         0.19 sys
+MIN TIME: 3.79s
+PEAK MEM: 49.1Mb
 ```
 
 # D (LDC)
@@ -20,7 +22,8 @@ From https://dlang.org/blog/2017/05/24/faster-command-line-tools-in-d/
 From https://dlang.org/blog/2017/05/24/faster-command-line-tools-in-d/
 
 ```
-        1.84 real         1.56 user         0.10 sys
+MIN TIME: 1.89s
+PEAK MEM: 2.2Mb
 ```
 
 # D (DMD)
@@ -28,7 +31,8 @@ From https://dlang.org/blog/2017/05/24/faster-command-line-tools-in-d/
 From https://dlang.org/blog/2017/05/24/faster-command-line-tools-in-d/
 
 ```
-        3.25 real         3.04 user         0.11 sys
+MIN TIME: 3.30s
+PEAK MEM: 1.5Mb
 ```
 
 # Nim
@@ -36,7 +40,8 @@ From https://dlang.org/blog/2017/05/24/faster-command-line-tools-in-d/
 From https://www.euantorano.co.uk/posts/faster-command-line-tools-in-nim/
 
 ```
-        1.56 real         1.48 user         0.05 sys
+MIN TIME: 1.40s
+PEAK MEM: 1.1Mb
 ```
 
 # golang
@@ -68,7 +73,8 @@ Soup to nuts:
 Final:
 
 ```
-        0.52 real         0.40 user         0.11 sys
+MIN TIME: 0.43s
+PEAK MEM: 1.4Mb
 ```
 
 # Haskell
@@ -84,9 +90,8 @@ sys     0m0.459s
 Later:
 
 ```
-real    0m3.959s
-user    0m3.703s
-sys     0m0.391s
+MIN TIME: 3.31s
+PEAK MEM: 49.6Mb
 ```
 
 # Rust
