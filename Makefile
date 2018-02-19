@@ -20,6 +20,7 @@ nim:
 	time ./nim/max_column_sum_by_key ./ngrams.tsv 1 2
 
 golang:
+	-rm go/csvtest
 	cd go && go build csvtest.go
 	time ./go/csvtest ./ngrams.tsv 1 2
 

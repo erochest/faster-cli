@@ -41,8 +41,27 @@ From https://www.euantorano.co.uk/posts/faster-command-line-tools-in-nim/
 
 # golang
 
+First pass:
+
 ```
-        3.18 real         3.04 user         0.21 sys
+        3.28 real         3.18 user         0.20 sys
+```
+
+Channels and Go routines:
+
+```
+        4.30 real        15.29 user         1.81 sys
+```
+
+Don't use strings:
+
+```
+        1.78 real         1.64 user         0.13 sys
+```
+
+Soup to nuts:
+
+```
 ```
 
 # Haskell

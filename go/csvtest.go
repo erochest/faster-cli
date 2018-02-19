@@ -2,66 +2,87 @@ package main
 
 import (
 	"bufio"
+	"bytes"
+	"errors"
 	"fmt"
-	"io"
-	"math"
 	"os"
-	"strconv"
-	"strings"
 )
 
-func maxEntry(dict map[int]int) (key, value int) {
-	mk := 0
-	mv := 0
+func processFile(file *os.File, keyField, valueField int) {
+	var sumByKey = make(map[string]int)
+	maxField := keyField
+	if valueField > maxField {
+		maxField = valueField
+	}
 
-	for k, v := range dict {
-		if mv < v {
-			mv = v
-			mk = k
+	scanner := bufio.NewScanner(file)
+
+	for scanner.Scan() {
+		line := scanner.Bytes()
+		key, val := getKeyVal(line, keyField, valueField, maxField)
+		sumByKey[key] += val
+	}
+	var k string
+	v := -1
+	for key, val := range sumByKey {
+		if val > v {
+			k = key
+			v = val
 		}
 	}
-	return mk, mv
+	fmt.Printf("max_key: %s sum: %d", k, v)
+
 }
 
 func main() {
-	sumByKey := make(map[int]int)
-	delim := "\t"
 
-	if len(os.Args) < 3 {
-		fmt.Println("synopsis: csvtest filename keyfield valuefield")
-		os.Exit(1)
-	}
+	file, _ := os.Open(os.Args[1])
+	defer file.Close()
 
-	filename := os.Args[1]
-	keyFieldIndex, _ := strconv.Atoi(os.Args[2])
-	valueFieldIndex, _ := strconv.Atoi(os.Args[3])
-	maxFieldIndex := int(math.Max(float64(keyFieldIndex),
-		float64(valueFieldIndex)))
-	file, err := os.Open(filename)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
+	keyField, _ := atoi([]byte(os.Args[2]))
+	valueField, _ := atoi([]byte(os.Args[3]))
+	processFile(file, keyField, valueField)
 
-	reader := bufio.NewReader(file)
+}
 
-	for {
-		line, err := reader.ReadString('\n')
-		if err == io.EOF {
-			break
+func getKeyVal(line []byte, keyField, valueField, maxField int) (string, int) {
+	var i int
+	var tabIndex int
+	var k []byte
+	var v []byte
+	var field []byte
+
+	for i <= maxField && len(line) > 0 {
+		tabIndex = bytes.IndexByte(line, '\t') // returns -1 if not found
+		if tabIndex < 0 {
+			field = line
+			line = nil
+		} else {
+			field = line[:tabIndex]
+			line = line[tabIndex+1:]
 		}
-		record := strings.Split(line, delim)
-		if maxFieldIndex < len(record) {
-			value, _ := strconv.Atoi(record[valueFieldIndex])
-			key, _ := strconv.Atoi(record[keyFieldIndex])
-			sumByKey[key] += value
+		switch i {
+		case keyField:
+			k = field
+		case valueField:
+			v = field
 		}
+		i++
 	}
+	val, _ := atoi(v)
+	return string(k), val
+}
 
-	if len(sumByKey) == 0 {
-		fmt.Println("No entries")
-	} else {
-		maxKey, maxValue := maxEntry(sumByKey)
-		fmt.Println("max_key:", maxKey, "sum:", maxValue)
+var errAtoi = errors.New("invalid number")
+
+func atoi(input []byte) (int, error) {
+	val := 0
+	for i := 0; i < len(input); i++ {
+		char := input[i]
+		if char < '0' || char > '9' {
+			return 0, errAtoi
+		}
+		val = val*10 + int(char) - '0'
 	}
+	return val, nil
 }
