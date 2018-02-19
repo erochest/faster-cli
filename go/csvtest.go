@@ -4,45 +4,55 @@ import (
 	"bufio"
 	"bytes"
 	"errors"
-	"fmt"
+	"log"
 	"os"
 )
 
-func processFile(file *os.File, keyField, valueField int) {
-	var sumByKey = make(map[string]int)
-	maxField := keyField
-	if valueField > maxField {
-		maxField = valueField
+func processLine(b []byte) (int, int) {
+	key := 0
+	val := 0
+	i := 0
+	for b[i] != '\t' {
+		i++
 	}
+	for i++; b[i] != '\t'; i++ {
+		key = key*10 + int(b[i]) - '0'
+	}
+	for i++; b[i] != '\t'; i++ {
+		val = val*10 + int(b[i]) - '0'
+	}
+	return key, val
+}
+
+func processFile(file *os.File) (int, int) {
+	var sumByKey [2009]int
 
 	scanner := bufio.NewScanner(file)
-
 	for scanner.Scan() {
 		line := scanner.Bytes()
-		key, val := getKeyVal(line, keyField, valueField, maxField)
-		sumByKey[key] += val
+		k1, v1 := processLine(line)
+		sumByKey[k1] += v1
 	}
-	var k string
-	v := -1
-	for key, val := range sumByKey {
+	var k int
+	var v int
+	for i, val := range sumByKey {
 		if val > v {
-			k = key
+			k = i
 			v = val
 		}
 	}
-	fmt.Printf("max_key: %s sum: %d", k, v)
+	return k, v
 
 }
 
 func main() {
 
-	file, _ := os.Open(os.Args[1])
+	file, err := os.Open(os.Args[1])
 	defer file.Close()
-
-	keyField, _ := atoi([]byte(os.Args[2]))
-	valueField, _ := atoi([]byte(os.Args[3]))
-	processFile(file, keyField, valueField)
-
+	if err != nil {
+		log.Fatal(err)
+	}
+	processFile(file)
 }
 
 func getKeyVal(line []byte, keyField, valueField, maxField int) (string, int) {
@@ -69,20 +79,18 @@ func getKeyVal(line []byte, keyField, valueField, maxField int) (string, int) {
 		}
 		i++
 	}
-	val, _ := atoi(v)
+	val := atoi(v)
 	return string(k), val
 }
 
 var errAtoi = errors.New("invalid number")
 
-func atoi(input []byte) (int, error) {
-	val := 0
-	for i := 0; i < len(input); i++ {
-		char := input[i]
-		if char < '0' || char > '9' {
-			return 0, errAtoi
-		}
-		val = val*10 + int(char) - '0'
+func atoi(s []byte) int {
+	i := 0
+	x := 0
+	for ; i < len(s); i++ {
+		c := s[i]
+		x = x*10 + int(c) - '0'
 	}
-	return val, nil
+	return x
 }

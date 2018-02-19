@@ -62,6 +62,13 @@ Don't use strings:
 Soup to nuts:
 
 ```
+        0.76 real         0.61 user         0.11 sys
+```
+
+Final:
+
+```
+        0.52 real         0.40 user         0.11 sys
 ```
 
 # Haskell
