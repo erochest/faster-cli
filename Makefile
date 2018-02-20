@@ -54,7 +54,12 @@ rust:
 		cargo build --release && \
 		../repeat.rb ./target/release/faster-rs $(DATAFILE) 1 2
 
-rust-profile: rust
+rust-profile:
+	-rm -f ./faster-rs/faster-rs.stacks
+	cd faster-rs && \
+		cargo clean && \
+		cargo build --release
+	cd faster-rs && sudo dtrace -c './target/release/faster-rs ../ngrams.tsv 1 2' -o faster-rs.stacks -n 'profile-997 /execname == "faster-rs"/ { @[ustack(100)] = count(); }'
 	~/s/FlameGraph/stackcollapse.pl ./faster-rs/faster-rs.stacks | ~/s/FlameGraph/flamegraph.pl > ./faster-rs/faster-rs.svg
 
 .PHONY: python pypy d-ldc d-dmd nim golang haskell rust rust-profile

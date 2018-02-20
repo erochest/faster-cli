@@ -16,13 +16,11 @@ pub fn run(filename: String, key_index: usize, value_index: usize) {
 
     reader
         .lines()
-        .into_iter()
         .filter_map(|line| parse_line(line, key_index, value_index))
         .fold(HashMap::new(), count_items)
         .into_iter()
         .max_by_key(|p| p.1)
-        .into_iter()
-        .for_each(|(k, v)| println!("max-key: {}\tsum: {}", k, v));
+        .map(|(k, v)| println!("max-key: {}\tsum: {}", k, v));
 }
 
 fn parse_line(
@@ -37,13 +35,12 @@ fn parse_line(
     Some((key, value))
 }
 
-fn parse_nth<I, O>(input: &mut I, n: usize) -> Option<O>
+fn parse_nth<'a, I, O>(input: &mut I, n: usize) -> Option<O>
 where
-    I: Iterator,
-    I::Item: ToString,
+    I: Iterator<Item=&'a str>,
     O: FromStr,
 {
-    input.nth(n).and_then(|v| v.to_string().parse().ok())
+    input.nth(n).and_then(|v| v.parse().ok())
 }
 
 fn count_items(mut freqs: HashMap<usize, usize>, pair: (usize, usize)) -> HashMap<usize, usize> {
