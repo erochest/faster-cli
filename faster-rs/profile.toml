@@ -1,0 +1,9 @@
+[tasks.profile]
+script = [
+'''
+rm -f faster-rs.stacks
+cargo build --release
+sudo dtrace -c './target/release/faster-rs ../ngrams.tsv 1 2' -o faster-rs.stacks -n 'profile-997 /execname == "faster-rs"/ { @[ustack(100)] = count(); }'
+${FLAMEGRAPH}stackcollapse.pl ./faster-rs.stacks | ${FLAMEGRAPH}flamegraph.pl > ./faster-rs.svg
+'''
+]
