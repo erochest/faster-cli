@@ -48,6 +48,17 @@ where
     input.nth(n).and_then(parse_bytes)
 }
 
+fn read_next_field(input: &[u8]) -> Option<(&[u8], usize)> {
+    let mut field = Vec::with_capacity(32);
+    for (i, c) in input.iter().enumerate() {
+        if *c == b'\t' {
+            return Some((field.as_slice(), i + 1));
+        }
+        field.push(*c);
+    }
+    None
+}
+
 fn parse_bytes(input: &[u8]) -> Option<usize> {
     // 0 1 2 3 4 5 6 7 8 9
     let mut n: usize = 0;

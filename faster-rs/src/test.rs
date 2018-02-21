@@ -111,3 +111,41 @@ mod parse_bytes {
         assert_eq!(Some(42), parse_bytes(b"42hello"));
     }
 }
+
+mod read_next_field {
+    use super::super::read_next_field;
+
+    #[test]
+    fn test_eats_leading_whitespace() {
+        /*
+         *let input = &b"\tsomething\tsomething-else";
+         *let field = read_next_field(&input[..]);
+         *assert!(field.is_some());
+         *if let Some((field, _)) = field {
+         *    assert_eq!(&b"something"[..], field);
+         *}
+         */
+    }
+
+    #[test]
+    fn test_reads_next_field() {
+        let input = &b"abc\tdef";
+        let field = read_next_field(&input[..]);
+        assert!(field.is_some());
+        if let Some((field, _)) = field {
+            assert_eq!(&b"abc"[..], field);
+        }
+    }
+
+    #[test]
+    fn test_returns_next_index() {
+    }
+
+    #[test]
+    fn test_returns_all_of_the_last_field() {
+    }
+
+    #[test]
+    fn test_returns_empty_field_with_trailing_whitespace() {
+    }
+}
