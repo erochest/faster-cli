@@ -116,3 +116,10 @@ Third:
 MIN TIME: 2.59s
 PEAK MEM: 1.2Mb
 ```
+
+Fourth:
+
+```
+MIN TIME: 1.60s
+PEAK MEM: 1.2Mb
+```

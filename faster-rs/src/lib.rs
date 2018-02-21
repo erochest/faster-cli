@@ -1,52 +1,80 @@
 #![feature(entry_and_modify)]
+#![feature(slice_rsplit)]
 
 use std::collections::hash_map::HashMap;
 use std::fs::File;
-use std::io;
-use std::io::prelude::*;
 use std::io::BufReader;
+use std::io::prelude::*;
 use std::iter::Iterator;
-use std::str::FromStr;
 
-const BUFFER_SIZE: usize = 12 * 1024;
+const BUFFER_SIZE: usize = 8 * 1024;
 
 pub fn run(filename: String, key_index: usize, value_index: usize) {
     let f = File::open(filename).unwrap();
-    let reader = BufReader::with_capacity(BUFFER_SIZE, f);
+    let mut reader = BufReader::with_capacity(BUFFER_SIZE, f);
+    let mut buffer = Vec::with_capacity(256);
+    let mut counts: HashMap<usize, usize> = HashMap::new();
 
-    reader
-        .lines()
-        .filter_map(|line| parse_line(line, key_index, value_index))
-        .fold(HashMap::new(), count_items)
-        .into_iter()
+    loop {
+        buffer.clear();
+
+        let read = reader.read_until(b'\n', &mut buffer)
+            .expect("Unable to read from input.");
+        if read == 0 {
+            break;
+        }
+
+        if let Some(pair) = parse_line(&buffer, key_index, value_index) {
+            count_items(&mut counts, pair);
+        }
+    }
+
+    counts.into_iter()
         .max_by_key(|p| p.1)
         .map(|(k, v)| println!("max-key: {}\tsum: {}", k, v));
 }
 
 fn parse_line(
-    line: io::Result<String>,
+    line: &[u8],
     key_index: usize,
     value_index: usize,
 ) -> Option<(usize, usize)> {
-    let line = line.ok()?;
-    let mut words = line.split_whitespace();
+    let mut words = line.split(|n| n.is_ascii_whitespace());
     let key = parse_nth(&mut words, key_index)?;
     let value = parse_nth(&mut words, value_index - (key_index + 1))?;
     Some((key, value))
 }
 
-fn parse_nth<'a, I, O>(input: &mut I, n: usize) -> Option<O>
+fn parse_nth<'a, I>(input: &mut I, n: usize) -> Option<usize>
 where
-    I: Iterator<Item=&'a str>,
-    O: FromStr,
+    I: Iterator<Item=&'a [u8]>,
 {
-    input.nth(n).and_then(|v| v.parse().ok())
+    input.nth(n).and_then(parse_bytes)
 }
 
-fn count_items(mut freqs: HashMap<usize, usize>, pair: (usize, usize)) -> HashMap<usize, usize> {
+fn parse_bytes(input: &[u8]) -> Option<usize> {
+    // 0 1 2 3 4 5 6 7 8 9
+    let mut n: usize = 0;
+    let mut read: usize = 0;
+
+    for c in input {
+        if *c < 48 || *c > 57 {
+            break;
+        }
+        n = (n * 10) + usize::from(*c - 48);
+        read += 1;
+    }
+
+    if read == 0 {
+        None
+    } else {
+        Some(n)
+    }
+}
+
+fn count_items(freqs: &mut HashMap<usize, usize>, pair: (usize, usize)) {
     let (k, v) = pair;
     freqs.entry(k).and_modify(|e| *e += v).or_insert(v);
-    freqs
 }
 
 #[cfg(test)]

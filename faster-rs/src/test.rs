@@ -4,16 +4,16 @@ use super::*;
 #[test]
 fn test_parses_line() {
     let input = vec![
-        "0'9	1797	1	1",
-        "0'9	1803	1	1",
-        "0'9	1816	2	2",
-        "0'9	1817	1	1",
-        "0'9	1824	4	4",
-        "0'9	1835	1	1",
-        "0'9	1836	2	2",
-        "0'9	1839	8	4",
-        "0'9	1843	2	1",
-        "0'9	1846	3	3",
+        b"0'9	1797	1	1",
+        b"0'9	1803	1	1",
+        b"0'9	1816	2	2",
+        b"0'9	1817	1	1",
+        b"0'9	1824	4	4",
+        b"0'9	1835	1	1",
+        b"0'9	1836	2	2",
+        b"0'9	1839	8	4",
+        b"0'9	1843	2	1",
+        b"0'9	1846	3	3",
     ];
     let expected = vec![
         (1797, 1),
@@ -32,7 +32,7 @@ fn test_parses_line() {
         expected,
         input
         .into_iter()
-        .filter_map(|line| parse_line(Ok(String::from(line)), 1, 2))
+        .filter_map(|line| parse_line(line, 1, 2))
         .collect::<Vec<(usize, usize)>>()
         );
 }
@@ -71,9 +71,11 @@ fn test_count_items() {
         (1843, 6),
         (1846, 3),
     ];
-    let mut actual = input
-        .into_iter()
-        .fold(HashMap::new(), count_items)
+    let mut counts: HashMap<usize, usize> = HashMap::new();
+    for items in input {
+        count_items(&mut counts, items);
+    }
+    let mut actual = counts
         .into_iter()
         .collect::<Vec<(usize, usize)>>();
     actual.sort();
@@ -81,8 +83,33 @@ fn test_count_items() {
 }
 
 #[test]
-fn test_parse_nth() {
-    let mut input = vec!["0'9", "1839", "8", "4"].into_iter();
+fn test_nth() {
+    let input: Vec<&[u8]> = vec![b"0'9", b"1839", b"8", b"4"];
+    let mut input = input.into_iter();
     assert_eq!(Some(1839), parse_nth(&mut input, 1));
     assert_eq!(Some(8), parse_nth(&mut input, 2 - (1 + 1)));
+}
+
+mod parse_bytes {
+    use super::super::parse_bytes;
+
+    #[test]
+    fn test_zero() {
+        assert_eq!(Some(0), parse_bytes(b"0"));
+    }
+
+    #[test]
+    fn test_empty() {
+        assert_eq!(None, parse_bytes(b""));
+    }
+
+    #[test]
+    fn test_nonnumeric() {
+        assert_eq!(None, parse_bytes(b"hello"));
+    }
+
+    #[test]
+    fn test_trailing() {
+        assert_eq!(Some(42), parse_bytes(b"42hello"));
+    }
 }
