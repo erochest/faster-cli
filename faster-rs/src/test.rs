@@ -31,10 +31,10 @@ fn test_parses_line() {
     assert_eq!(
         expected,
         input
-        .into_iter()
-        .filter_map(|line| parse_line(line, 1, 2))
-        .collect::<Vec<(usize, usize)>>()
-        );
+            .into_iter()
+            .filter_map(|line| parse_line(line, 1, 2))
+            .collect::<Vec<(usize, usize)>>()
+    );
 }
 
 #[test]
@@ -75,9 +75,7 @@ fn test_count_items() {
     for items in input {
         count_items(&mut counts, items);
     }
-    let mut actual = counts
-        .into_iter()
-        .collect::<Vec<(usize, usize)>>();
+    let mut actual = counts.into_iter().collect::<Vec<(usize, usize)>>();
     actual.sort();
     assert_eq!(expected, actual);
 }

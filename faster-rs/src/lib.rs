@@ -7,18 +7,17 @@ use std::io::BufReader;
 use std::io::prelude::*;
 use std::iter::Iterator;
 
-const BUFFER_SIZE: usize = 8 * 1024;
-
 pub fn run(filename: String, key_index: usize, value_index: usize) {
     let f = File::open(filename).unwrap();
-    let mut reader = BufReader::with_capacity(BUFFER_SIZE, f);
+    let mut reader = BufReader::new(f);
     let mut buffer = Vec::with_capacity(256);
     let mut counts: HashMap<usize, usize> = HashMap::new();
 
     loop {
         buffer.clear();
 
-        let read = reader.read_until(b'\n', &mut buffer)
+        let read = reader
+            .read_until(b'\n', &mut buffer)
             .expect("Unable to read from input.");
         if read == 0 {
             break;
@@ -29,16 +28,13 @@ pub fn run(filename: String, key_index: usize, value_index: usize) {
         }
     }
 
-    counts.into_iter()
+    counts
+        .into_iter()
         .max_by_key(|p| p.1)
         .map(|(k, v)| println!("max-key: {}\tsum: {}", k, v));
 }
 
-fn parse_line(
-    line: &[u8],
-    key_index: usize,
-    value_index: usize,
-) -> Option<(usize, usize)> {
+fn parse_line(line: &[u8], key_index: usize, value_index: usize) -> Option<(usize, usize)> {
     let mut words = line.split(|n| n.is_ascii_whitespace());
     let key = parse_nth(&mut words, key_index)?;
     let value = parse_nth(&mut words, value_index - (key_index + 1))?;
@@ -47,7 +43,7 @@ fn parse_line(
 
 fn parse_nth<'a, I>(input: &mut I, n: usize) -> Option<usize>
 where
-    I: Iterator<Item=&'a [u8]>,
+    I: Iterator<Item = &'a [u8]>,
 {
     input.nth(n).and_then(parse_bytes)
 }
